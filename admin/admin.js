@@ -1,6 +1,6 @@
 // Admin JavaScript
-// Use the same origin (server on port 3000) or specify the full URL
-const API_BASE = window.location.origin.includes('3000') ? '' : 'http://localhost:3000';
+// Always use relative paths for API endpoints
+const API_BASE = '';
 
 function checkAuth() {
     const token = localStorage.getItem('adminToken');
