@@ -78,6 +78,13 @@
                         <label>Color</label>
                         <input type="text" id="car-color" required />
                     </div>
+                    <div class="form-row">
+                        <label>Status</label>
+                        <select id="car-status" required>
+                            <option value="active">Active</option>
+                            <option value="sold">Sold</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="form-row">
                     <label>Images</label>
@@ -163,6 +170,7 @@
                                     <td><span class="status-badge status-${c.status || 'active'}">${c.status || 'active'}</span></td>
                                     <td>
                                         <button class="btn btn-outline btn-small" onclick="editCar('${c.id}')">Edit</button>
+                                        <button class="btn ${c.status === 'sold' ? 'btn-primary' : 'btn-outline'} btn-small" onclick="toggleSoldStatus('${c.id}', '${c.status}')">${c.status === 'sold' ? 'Mark Active' : 'Mark Sold'}</button>
                                         <button class="btn btn-ghost btn-small" onclick="deleteCar('${c.id}')">Delete</button>
                                     </td>
                                 </tr>
@@ -272,7 +280,8 @@
                 transmission: document.getElementById('car-transmission').value,
                 color: document.getElementById('car-color').value,
                 images: images,
-                specs: specs
+                specs: specs,
+                status: document.getElementById('car-status')?.value || 'active'
             };
 
             try {
@@ -347,6 +356,37 @@
 
         document.getElementById('car-modal').addEventListener('click', (e) => {
             if (e.target.id === 'car-modal') closeCarModal();
+        });
+
+        async function toggleSoldStatus(id, currentStatus) {
+            try {
+                const newStatus = currentStatus === 'sold' ? 'active' : 'sold';
+                const res = await apiCall('/api/cars', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        id: id,
+                        status: newStatus
+                    })
+                });
+
+                if (res && res.ok) {
+                    loadCars();
+                }
+            } catch (err) {
+                console.error('Failed to update car status', err);
+                alert('Failed to update car status');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const style = document.createElement('style');
+            style.textContent = `
+                .status-badge.status-sold {
+                    background: rgba(220, 38, 38, 0.1);
+                    color: rgb(220, 38, 38);
+                }
+            `;
+            document.head.appendChild(style);
         });
     </script>
 </body>

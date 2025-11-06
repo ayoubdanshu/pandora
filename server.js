@@ -251,16 +251,31 @@ app.get('/api/cars/public', (req, res) => {
 
 // Add/Update car
 app.post('/api/cars', authenticateToken, (req, res) => {
-    const { id, brand, model, year, price, mileage, fuel, transmission, color, images, specs } = req.body;
+    const { id, brand, model, year, price, mileage, fuel, transmission, color, images, specs, status } = req.body;
+    
+    // If only id and status are provided, it's a status update
+    if (id && status && Object.keys(req.body).length === 2) {
+        db.run(
+            "UPDATE cars SET status = ? WHERE id = ?",
+            [status, id],
+            function(err) {
+                if (err) {
+                    return res.status(500).json({ error: 'Failed to update car status' });
+                }
+                res.json({ success: true });
+            }
+        );
+        return;
+    }
 
     db.run(
-        `INSERT INTO cars (id, brand, model, year, price, mileage, fuel, transmission, color, images, specs)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `INSERT INTO cars (id, brand, model, year, price, mileage, fuel, transmission, color, images, specs, status)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
          ON CONFLICT(id) DO UPDATE SET
          brand = ?, model = ?, year = ?, price = ?, mileage = ?, fuel = ?, transmission = ?, 
-         color = ?, images = ?, specs = ?, updated_at = CURRENT_TIMESTAMP`,
-        [id, brand, model, year, price, mileage, fuel, transmission, color, JSON.stringify(images), JSON.stringify(specs),
-         brand, model, year, price, mileage, fuel, transmission, color, JSON.stringify(images), JSON.stringify(specs)],
+         color = ?, images = ?, specs = ?, status = ?, updated_at = CURRENT_TIMESTAMP`,
+        [id, brand, model, year, price, mileage, fuel, transmission, color, JSON.stringify(images), JSON.stringify(specs), status || 'active',
+         brand, model, year, price, mileage, fuel, transmission, color, JSON.stringify(images), JSON.stringify(specs), status || 'active'],
         function(err) {
             if (err) {
                 return res.status(500).json({ error: 'Failed to save car' });
