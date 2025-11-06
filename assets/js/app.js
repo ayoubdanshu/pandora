@@ -305,11 +305,16 @@ function initForms() {
             if (!validateForm(bookingForm)) return;
             
             const formData = new FormData(bookingForm);
+            const carId = formData.get('carId');
+            const selectedCar = state.cars.find(car => car.id === carId);
+            const carName = selectedCar ? `${selectedCar.brand} ${selectedCar.model}` : '';
+            
             const data = {
                 name: formData.get('name'),
                 email: formData.get('email'),
                 phone: formData.get('phone'),
-                carId: formData.get('carId'),
+                carId: carId,
+                carName: carName,
                 date: formData.get('date'),
                 time: formData.get('time')
             };

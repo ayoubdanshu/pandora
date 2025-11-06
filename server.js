@@ -144,23 +144,18 @@ app.post('/api/admin/login', async (req, res) => {
 
 // Submit booking
 app.post('/api/booking', (req, res) => {
-    const { name, email, phone, carId, date, time } = req.body;
+    const { name, email, phone, carId, carName, date, time } = req.body;
 
-    // Get car name from cars.json or database
-    db.get("SELECT brand, model FROM cars WHERE id = ?", [carId], (err, car) => {
-        const carName = car ? `${car.brand} ${car.model}` : 'Unknown Car';
-
-        db.run(
-            "INSERT INTO bookings (name, email, phone, car_id, car_name, date, time) VALUES (?, ?, ?, ?, ?, ?, ?)",
-            [name, email, phone, carId, carName, date, time],
-            function(err) {
-                if (err) {
-                    return res.status(500).json({ error: 'Failed to save booking' });
-                }
-                res.json({ success: true, id: this.lastID });
+    db.run(
+        "INSERT INTO bookings (name, email, phone, car_id, car_name, date, time) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        [name, email, phone, carId, carName, date, time],
+        function(err) {
+            if (err) {
+                return res.status(500).json({ error: 'Failed to save booking' });
             }
-        );
-    });
+            res.json({ success: true, id: this.lastID });
+        }
+    );
 });
 
 // Submit contact form
