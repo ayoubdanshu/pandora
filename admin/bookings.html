@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bookings — Pandora Motors CRM</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+    <header class="admin-header">
+        <div class="container header-inner">
+            <a href="dashboard.html" class="logo">Pandora<span>Motors</span> <span style="color: var(--muted); font-size: 14px;">CRM</span></a>
+            <nav class="admin-nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="bookings.html" class="active">Bookings</a>
+                <a href="contacts.html">Contacts</a>
+                <a href="listings.html">Listings</a>
+                <button id="logout-btn" class="btn btn-ghost btn-small">Logout</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="admin-main">
+        <div class="container">
+            <h1 style="margin: 24px 0;">Bookings Management</h1>
+            
+            <div id="bookings-container" class="table-container">
+                <p>Loading...</p>
+            </div>
+        </div>
+    </main>
+
+    <div id="booking-modal" class="modal">
+        <div class="modal-content">
+            <h2>Booking Details</h2>
+            <div id="booking-details"></div>
+            <div class="form-row">
+                <label>Status</label>
+                <select id="booking-status">
+                    <option value="pending">Pending</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <label>Notes</label>
+                <textarea id="booking-notes" rows="3"></textarea>
+            </div>
+            <div class="action-buttons" style="margin-top: 16px;">
+                <button class="btn btn-primary" id="save-booking">Save</button>
+                <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+    <script>
+        checkAuth();
+        let currentBookingId = null;
+
+        loadBookings();
+
+        async function loadBookings() {
+            try {
+                const res = await apiCall('/api/bookings');
+                if (!res) return;
+                const bookings = await res.json();
+                
+                const container = document.getElementById('bookings-container');
+                if (bookings.length === 0) {
+                    container.innerHTML = '<p>No bookings yet.</p>';
+                    return;
+                }
+
+                container.innerHTML = `
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Car</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${bookings.map(b => `
+                                <tr>
+                                    <td>#${b.id}</td>
+                                    <td>${b.name}</td>
+                                    <td>${b.email}</td>
+                                    <td>${b.phone}</td>
+                                    <td>${b.car_name || b.car_id || 'N/A'}</td>
+                                    <td>${b.date}</td>
+                                    <td>${b.time}</td>
+                                    <td><span class="status-badge status-${b.status}">${b.status}</span></td>
+                                    <td>
+                                        <button class="btn btn-outline btn-small" onclick="viewBooking(${b.id})">View</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            } catch (err) {
+                console.error('Failed to load bookings', err);
+            }
+        }
+
+        async function viewBooking(id) {
+            try {
+                const res = await apiCall(`/api/bookings`);
+                if (!res) return;
+                const bookings = await res.json();
+                const booking = bookings.find(b => b.id === id);
+                
+                if (!booking) return;
+
+                currentBookingId = id;
+                document.getElementById('booking-details').innerHTML = `
+                    <p><strong>Name:</strong> ${booking.name}</p>
+                    <p><strong>Email:</strong> ${booking.email}</p>
+                    <p><strong>Phone:</strong> ${booking.phone}</p>
+                    <p><strong>Car:</strong> ${booking.car_name || booking.car_id || 'N/A'}</p>
+                    <p><strong>Date:</strong> ${booking.date}</p>
+                    <p><strong>Time:</strong> ${booking.time}</p>
+                    <p><strong>Created:</strong> ${new Date(booking.created_at).toLocaleString()}</p>
+                `;
+                document.getElementById('booking-status').value = booking.status || 'pending';
+                document.getElementById('booking-notes').value = booking.notes || '';
+                document.getElementById('booking-modal').classList.add('active');
+            } catch (err) {
+                console.error('Failed to load booking', err);
+            }
+        }
+
+        document.getElementById('save-booking').addEventListener('click', async () => {
+            if (!currentBookingId) return;
+
+            const status = document.getElementById('booking-status').value;
+            const notes = document.getElementById('booking-notes').value;
+
+            try {
+                const res = await apiCall(`/api/bookings/${currentBookingId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ status, notes })
+                });
+
+                if (res && res.ok) {
+                    closeModal();
+                    loadBookings();
+                }
+            } catch (err) {
+                console.error('Failed to update booking', err);
+            }
+        });
+
+        function closeModal() {
+            document.getElementById('booking-modal').classList.remove('active');
+            currentBookingId = null;
+        }
+
+        document.getElementById('booking-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'booking-modal') closeModal();
+        });
+    </script>
+</body>
+</html>
+

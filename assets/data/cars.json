@@ -1,0 +1,124 @@
+[
+  {
+    "id": "1",
+    "brand": "BMW",
+    "model": "M4 Competition",
+    "year": 2023,
+    "price": 89900,
+    "mileage": 3500,
+    "fuel": "Petrol",
+    "transmission": "Automatic",
+    "color": "Black Sapphire",
+    "images": [
+      "https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=1920&auto=format&fit=crop"
+    ],
+    "specs": {
+      "engine": "3.0L Twin-Turbo I6",
+      "power": "503 hp",
+      "drivetrain": "RWD",
+      "mpg": "16/23"
+    }
+  },
+  {
+    "id": "2",
+    "brand": "Mercedes",
+    "model": "C63 S",
+    "year": 2022,
+    "price": 82900,
+    "mileage": 6200,
+    "fuel": "Petrol",
+    "transmission": "Automatic",
+    "color": "Polar White",
+    "images": [
+      "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?q=80&w=1920&auto=format&fit=crop"
+    ],
+    "specs": {
+      "engine": "4.0L BiTurbo V8",
+      "power": "503 hp",
+      "drivetrain": "RWD",
+      "mpg": "18/26"
+    }
+  },
+  {
+    "id": "3",
+    "brand": "Audi",
+    "model": "RS5",
+    "year": 2021,
+    "price": 75900,
+    "mileage": 9800,
+    "fuel": "Petrol",
+    "transmission": "Automatic",
+    "color": "Nardo Gray",
+    "images": [
+      "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?q=80&w=1920&auto=format&fit=crop"
+    ],
+    "specs": {
+      "engine": "2.9L Twin-Turbo V6",
+      "power": "444 hp",
+      "drivetrain": "AWD",
+      "mpg": "18/25"
+    }
+  },
+  {
+    "id": "4",
+    "brand": "Porsche",
+    "model": "911 Carrera",
+    "year": 2020,
+    "price": 112000,
+    "mileage": 12000,
+    "fuel": "Petrol",
+    "transmission": "PDK",
+    "color": "Guards Red",
+    "images": [
+      "https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1920&auto=format&fit=crop"
+    ],
+    "specs": {
+      "engine": "3.0L Twin-Turbo H6",
+      "power": "379 hp",
+      "drivetrain": "RWD",
+      "mpg": "18/24"
+    }
+  },
+  {
+    "id": "5",
+    "brand": "Tesla",
+    "model": "Model S Plaid",
+    "year": 2024,
+    "price": 129990,
+    "mileage": 1200,
+    "fuel": "Electric",
+    "transmission": "Single Speed",
+    "color": "Midnight Silver",
+    "images": [
+      "https://images.unsplash.com/photo-1560958089-b8a1929cea89?q=80&w=1920&auto=format&fit=crop"
+    ],
+    "specs": {
+      "engine": "Tri-Motor Electric",
+      "power": "1020 hp",
+      "drivetrain": "AWD",
+      "mpg": "396 mi range"
+    }
+  },
+  {
+    "id": "6",
+    "brand": "Lexus",
+    "model": "LC 500",
+    "year": 2021,
+    "price": 87900,
+    "mileage": 8000,
+    "fuel": "Petrol",
+    "transmission": "Automatic",
+    "color": "Structural Blue",
+    "images": [
+      "https://images.unsplash.com/photo-1617531653332-bd46c24f2068?q=80&w=1920&auto=format&fit=crop"
+    ],
+    "specs": {
+      "engine": "5.0L V8",
+      "power": "471 hp",
+      "drivetrain": "RWD",
+      "mpg": "16/25"
+    }
+  }
+]
+
+

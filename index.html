@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pandora Motors — Premium Car Dealership</title>
+    <meta name="description" content="Discover premium cars at Pandora Motors. Browse listings, view details, and book a test drive." />
+    <meta name="theme-color" content="#0b0f14" />
+    <link rel="icon" href="assets/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="index.html#home" class="logo" aria-label="Pandora Motors home">Pandora<span>Motors</span></a>
+            <nav class="nav" aria-label="Primary">
+                <button class="nav-toggle" aria-controls="primary-menu" aria-expanded="false">☰</button>
+                <ul id="primary-menu" class="nav-list">
+                    <li><a href="index.html#home">Home</a></li>
+                    <li><a href="pages/inventory.html">Inventory</a></li>
+                    <li><a href="pages/about.html">About</a></li>
+                    <li><a href="pages/testimonials.html">Testimonials</a></li>
+                    <li><a href="pages/contact.html">Contact</a></li>
+                    <li><a class="btn btn-primary btn-small" href="pages/booking.html">Book Test Drive</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="home" class="main">
+        <section class="hero reveal" data-animate="fade-up">
+            <div class="container hero-inner">
+                <div class="hero-copy">
+                    <h1>Drive Your Next Chapter</h1>
+                    <p>Explore a curated selection of premium vehicles. Transparent pricing, expert guidance, and a seamless experience.</p>
+                    <div class="hero-ctas">
+                        <a href="pages/inventory.html" class="btn btn-primary">Browse Cars</a>
+                        <a href="pages/booking.html" class="btn btn-outline">Book a Test Drive</a>
+                    </div>
+                </div>
+                <div class="hero-media" role="img" aria-label="Featured premium car image">
+                    <!-- React model viewer will mount here -->
+                    <div id="hero-model-root" style="width:100%; height:100%;"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="inventory" class="section inventory reveal" data-animate="fade-up">
+            <div class="container">
+                <div class="section-head">
+                    <h2>Featured Inventory</h2>
+                    <p>Filter by brand, model, and price to find your perfect match.</p>
+                </div>
+
+                <div class="filters" aria-label="Car filters">
+                    <div class="filter">
+                        <label for="filter-brand">Brand</label>
+                        <select id="filter-brand">
+                            <option value="">All</option>
+                        </select>
+                    </div>
+                    <div class="filter">
+                        <label for="filter-model">Model</label>
+                        <select id="filter-model">
+                            <option value="">All</option>
+                        </select>
+                    </div>
+                    <div class="filter">
+                        <label for="filter-price">Max Price</label>
+                        <input type="range" id="filter-price" min="20000" max="200000" step="1000" />
+                        <div class="range-output"><span id="filter-price-output"></span></div>
+                    </div>
+                    <div class="filter-actions">
+                        <button id="clear-filters" class="btn btn-ghost">Clear</button>
+                    </div>
+                </div>
+
+                <div id="cars-grid" class="cars-grid" role="list" aria-label="Car listings"></div>
+            </div>
+        </section>
+
+        <section id="about" class="section about reveal" data-animate="fade-up">
+            <div class="container two-col">
+                <div>
+                    <h2>About Pandora Motors</h2>
+                    <p>For over a decade, we’ve helped drivers find vehicles they love. Our approach is simple: curated cars, transparent pricing, and service that puts you first.</p>
+                    <ul class="checks">
+                        <li>Certified pre-owned and new inventory</li>
+                        <li>Upfront, no-pressure buying experience</li>
+                        <li>Expert advisors and service partners</li>
+                    </ul>
+                </div>
+                <div class="about-media" role="img" aria-label="Modern showroom"></div>
+            </div>
+        </section>
+
+        <section id="testimonials" class="section testimonials reveal" data-animate="fade-up">
+            <div class="container">
+                <div class="section-head">
+                    <h2>Loved by Drivers</h2>
+                    <p>See what our customers have to say about their experience.</p>
+                </div>
+                <div class="testimonial-grid">
+                    <figure class="testimonial">
+                        <blockquote>
+                            “A flawless experience. The team listened and delivered the perfect car.”
+                        </blockquote>
+                        <figcaption>— Jordan M.</figcaption>
+                    </figure>
+                    <figure class="testimonial">
+                        <blockquote>
+                            “Transparent pricing and impeccable service. Highly recommended.”
+                        </blockquote>
+                        <figcaption>— Priya S.</figcaption>
+                    </figure>
+                    <figure class="testimonial">
+                        <blockquote>
+                            “Booking a test drive was effortless. I was on the road in minutes.”
+                        </blockquote>
+                        <figcaption>— Alex R.</figcaption>
+                    </figure>
+                </div>
+                <div style="text-align: center; margin-top: 32px;">
+                    <a href="pages/testimonials.html" class="btn btn-outline">View All Testimonials</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="section contact reveal" data-animate="fade-up">
+            <div class="container two-col">
+                <div>
+                    <h2>Contact Us</h2>
+                    <p>Questions about a vehicle or financing? Send us a message and our team will reach out.</p>
+                    <form id="contact-form" novalidate>
+                        <div class="form-row">
+                            <label for="contact-name">Full Name</label>
+                            <input id="contact-name" name="name" type="text" required placeholder="Jane Doe" />
+                            <small class="error" data-error-for="contact-name"></small>
+                        </div>
+                        <div class="form-row">
+                            <label for="contact-email">Email</label>
+                            <input id="contact-email" name="email" type="email" required placeholder="jane@example.com" />
+                            <small class="error" data-error-for="contact-email"></small>
+                        </div>
+                        <div class="form-row">
+                            <label for="contact-message">Message</label>
+                            <textarea id="contact-message" name="message" rows="4" required placeholder="How can we help?"></textarea>
+                            <small class="error" data-error-for="contact-message"></small>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                        <p class="form-success" id="contact-success" role="status" aria-live="polite"></p>
+                    </form>
+                </div>
+                <div class="contact-aside">
+                    <div class="card">
+                        <h3>Showroom</h3>
+                        <p>123 Orion Ave, Suite 5<br/>Pandora City, PC 10010</p>
+                        <p><strong>Hours:</strong> Mon–Sat 9am–7pm</p>
+                        <p><strong>Phone:</strong> (555) 012-3456</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="booking" class="section booking reveal" data-animate="fade-up">
+            <div class="container">
+                <h2>Book a Test Drive</h2>
+                <form id="booking-form" class="booking-form" novalidate>
+                    <div class="form-grid">
+                        <div class="form-row">
+                            <label for="booking-name">Full Name</label>
+                            <input id="booking-name" name="name" type="text" required placeholder="John Smith" />
+                            <small class="error" data-error-for="booking-name"></small>
+                        </div>
+                        <div class="form-row">
+                            <label for="booking-email">Email</label>
+                            <input id="booking-email" name="email" type="email" required placeholder="john@example.com" />
+                            <small class="error" data-error-for="booking-email"></small>
+                        </div>
+                        <div class="form-row">
+                            <label for="booking-phone">Phone</label>
+                            <input id="booking-phone" name="phone" type="tel" required placeholder="(555) 123-4567" />
+                            <small class="error" data-error-for="booking-phone"></small>
+                        </div>
+                        <div class="form-row">
+                            <label for="booking-car">Select Car</label>
+                            <select id="booking-car" name="carId" required>
+                                <option value="">Choose a car</option>
+                            </select>
+                            <small class="error" data-error-for="booking-car"></small>
+                        </div>
+                        <div class="form-row">
+                            <label for="booking-date">Preferred Date</label>
+                            <input id="booking-date" name="date" type="date" required />
+                            <small class="error" data-error-for="booking-date"></small>
+                        </div>
+                        <div class="form-row">
+                            <label for="booking-time">Preferred Time</label>
+                            <input id="booking-time" name="time" type="time" required />
+                            <small class="error" data-error-for="booking-time"></small>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Confirm Booking</button>
+                    <p class="form-success" id="booking-success" role="status" aria-live="polite"></p>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div class="footer-brand">Pandora<span>Motors</span></div>
+            <div class="footer-copy">© <span id="year"></span> Pandora Motors. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <div id="car-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Car details">
+        <div class="modal-backdrop" data-close></div>
+        <div class="modal-content" role="document">
+            <button class="modal-close" aria-label="Close" data-close>×</button>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+        <!-- React + Three.js model viewer (UMD via unpkg) -->
+        <script src="https://unpkg.com/three@0.154.0/build/three.min.js"></script>
+        <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+        <script src="https://unpkg.com/@react-three/fiber@8.0.27/dist/react-three-fiber.umd.js"></script>
+        <script src="https://unpkg.com/@react-three/drei@9.56.6/dist/drei.umd.js"></script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+        <!-- Inline React component (transpiled by Babel) -->
+        <script type="text/babel">
+        const { useRef, useEffect, useLayoutEffect, useMemo, Suspense } = React;
+        const { Canvas, useFrame, useThree } = ReactThreeFiber;
+        const { Environment, ContactShadows, Html, useGLTF, useFBX } = drei;
+
+        // Minimal adapter: mount a simple Canvas and render a GLTF if provided
+        function HeroModel({ url }) {
+            const pivot = useRef(new THREE.Vector3());
+            const innerRef = useRef();
+
+            const Model = ({ url }) => {
+                const group = useRef();
+                const gltf = useGLTF ? useGLTF(url) : null;
+                useLayoutEffect(() => {
+                    if (!gltf || !group.current) return;
+                    const g = group.current;
+                    g.add(gltf.scene.clone());
+                }, [gltf]);
+                return <group ref={group} />;
+            };
+
+            return (
+                <Canvas camera={{ fov: 50, position: [0, 0, 2] }} style={{ width: '100%', height: '100%' }}>
+                    <ambientLight intensity={0.6} />
+                    <directionalLight position={[5, 5, 5]} intensity={1} />
+                    <Suspense fallback={null}>
+                        {url && <Model url={url} />}
+                    </Suspense>
+                    <ContactShadows position={[0, -0.5, 0]} opacity={0.4} scale={5} blur={2} />
+                </Canvas>
+            );
+        }
+
+        // Mount the HeroModel into the page
+        document.addEventListener('DOMContentLoaded', () => {
+            const root = document.getElementById('hero-model-root');
+            if (!root) return;
+            ReactDOM.render(<HeroModel url="/assets/models/hero.glb" />, root);
+        });
+        </script>
+
+        <script src="assets/js/app.js" defer></script>
+</body>
+</html>
+
+

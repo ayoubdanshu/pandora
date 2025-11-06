@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vehicle — Pandora Motors</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="icon" href="../assets/favicon.svg" />
+</head>
+<body data-page="vehicle">
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="../index.html#home" class="logo">Pandora<span>Motors</span></a>
+            <nav class="nav">
+                <button class="nav-toggle" aria-controls="primary-menu" aria-expanded="false">☰</button>
+                <ul id="primary-menu" class="nav-list">
+                    <li><a href="../index.html#home">Home</a></li>
+                    <li><a href="inventory.html">Inventory</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="testimonials.html">Testimonials</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a class="btn btn-primary btn-small" href="booking.html">Book Test Drive</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="page-hero reveal" data-animate="fade-up" id="vehicle-hero" style="display: none;">
+            <div class="container">
+                <nav class="breadcrumbs"><a href="../index.html#home">Home</a> <span class="sep">/</span> <a href="inventory.html">Inventory</a> <span class="sep">/</span> <span id="breadcrumb-car">Vehicle Details</span></nav>
+                <span class="eyebrow" id="hero-eyebrow">Vehicle Details</span>
+                <h1 id="hero-title">Loading...</h1>
+                <p id="hero-description">View detailed specifications, images, and features.</p>
+            </div>
+        </section>
+        <section class="section reveal" data-animate="fade-up">
+            <div class="container" id="vehicle-container">
+                <div class="card">Loading vehicle...</div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div class="footer-brand">Pandora<span>Motors</span></div>
+            <div class="footer-copy">© <span id="year"></span> Pandora Motors.</div>
+        </div>
+    </footer>
+
+    <script>
+        const params = new URLSearchParams(location.search);
+        const id = params.get('id');
+        async function renderVehicle() {
+            try {
+                    // Try loading from API first (database), fallback to static JSON
+                    const API_BASE = window.location.origin.includes('3000') ? '' : 'http://localhost:3000';
+                    let cars = [];
+                    try {
+                        const apiRes = await fetch(`${API_BASE}/api/cars/public`);
+                        if (apiRes.ok) {
+                            cars = await apiRes.json();
+                            cars = cars.map(car => ({
+                                ...car,
+                                images: typeof car.images === 'string' ? JSON.parse(car.images) : car.images,
+                                specs: typeof car.specs === 'string' ? JSON.parse(car.specs) : car.specs
+                            }));
+                        } else {
+                            throw new Error('API not available');
+                        }
+                    } catch (apiError) {
+                        // Fallback to static JSON file bundled with the frontend
+                        const res = await fetch('../assets/data/cars.json');
+                        cars = await res.json();
+                    }
+
+                    const car = cars.find(c => String(c.id) === String(id));
+                const container = document.getElementById('vehicle-container');
+                if (!car) { container.innerHTML = '<div class="card">Vehicle not found.</div>'; return; }
+                
+                // Update hero section
+                const hero = document.getElementById('vehicle-hero');
+                if (hero) {
+                    hero.style.display = 'block';
+                    document.getElementById('hero-eyebrow').textContent = `${car.brand} ${car.year}`;
+                    document.getElementById('hero-title').textContent = `${car.brand} ${car.model}`;
+                    document.getElementById('hero-description').textContent = `${car.year} • ${car.fuel} • ${car.transmission} • ${car.mileage.toLocaleString()} miles`;
+                    document.getElementById('breadcrumb-car').textContent = `${car.brand} ${car.model}`;
+                }
+                
+                container.innerHTML = `
+                    <div class="two-col" style="align-items:start">
+                        <div>
+                            <div style="aspect-ratio:16/9; background:url('${car.images[0]}') center/cover; border-radius:14px; box-shadow:var(--shadow);"></div>
+                            <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+                                ${(car.images.slice(0,4)).map(src => `<div style=\"width:120px; aspect-ratio:16/9; background:url('${src}') center/cover; border-radius:8px; border:1px solid var(--border);\"></div>`).join('')}
+                            </div>
+                        </div>
+                        <div>
+                            <h2 style="margin-top:0">${car.brand} ${car.model} <span style="color:var(--muted); font-weight:500">${car.year}</span></h2>
+                            <div class="card" style="margin:12px 0;">
+                                <div class="car-specs">
+                                    <span>${car.fuel}</span>
+                                    <span>${car.transmission}</span>
+                                    <span>${car.mileage.toLocaleString()} mi</span>
+                                    <span>${car.color}</span>
+                                </div>
+                            </div>
+                            <div class="card" style="margin:12px 0;">
+                                <strong>Specifications</strong>
+                                <ul style="margin:8px 0 0 18px">
+                                    <li>Engine: ${car.specs.engine}</li>
+                                    <li>Power: ${car.specs.power}</li>
+                                    <li>Drivetrain: ${car.specs.drivetrain}</li>
+                                    <li>MPG: ${car.specs.mpg}</li>
+                                </ul>
+                            </div>
+                            <div class="card" style="margin:12px 0;">
+                                <strong>Highlights</strong>
+                                <ul style="margin:8px 0 0 18px">
+                                    <li>Certified 150-point inspection completed</li>
+                                    <li>Clean vehicle history report available</li>
+                                    <li>Extended warranty options available</li>
+                                    <li>Full service records included</li>
+                                    <li>No accidents reported</li>
+                                </ul>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:12px; margin:12px 0 0; flex-wrap: wrap;">
+                                <div class="car-price" style="margin:0; font-size: 28px;">$${car.price.toLocaleString()}</div>
+                                <a class="btn btn-primary" href="booking.html?car=${car.id}">Book Test Drive</a>
+                                <a class="btn btn-outline" href="contact.html">Contact Us</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 32px;">
+                        <h2>Additional Information</h2>
+                        <div class="testimonial-grid" style="margin-top: 16px;">
+                            <div class="card">
+                                <h3>Vehicle History</h3>
+                                <p>This vehicle has a clean history with no reported accidents. Full vehicle history report available upon request. All service records are documented and available for review.</p>
+                            </div>
+                            <div class="card">
+                                <h3>Inspection Report</h3>
+                                <p>Every vehicle undergoes our comprehensive 150-point inspection covering mechanical systems, body condition, interior features, and safety systems. Inspection report available.</p>
+                            </div>
+                            <div class="card">
+                                <h3>Financing & Warranty</h3>
+                                <p>Competitive financing rates available. Extended warranty options can protect your investment. Our finance team can help you find the best solution for your needs.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 32px; text-align: center; padding: 24px; background: var(--surface); border-radius: 14px; border: 1px solid var(--border);">
+                        <h3 style="margin-top: 0;">Ready to Make It Yours?</h3>
+                        <p>Schedule a test drive or contact us to learn more about this vehicle. Our team is here to answer any questions and help you through the purchase process.</p>
+                        <div style="display: flex; gap: 12px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
+                            <a class="btn btn-primary" href="booking.html?car=${car.id}">Book Test Drive</a>
+                            <a class="btn btn-outline" href="contact.html">Contact Sales</a>
+                            <a class="btn btn-outline" href="inventory.html">View More Cars</a>
+                        </div>
+                    </div>
+                `;
+            } catch (e) {
+                document.getElementById('vehicle-container').innerHTML = '<div class="card">Error loading vehicle.</div>';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', renderVehicle);
+    </script>
+    <script src="../assets/js/app.js" defer></script>
+</body>
+</html>
+
+

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login — Pandora Motors CRM</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <style>
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(1200px 800px at 80% -10%, #0e141c 0%, var(--bg) 60%);
+            padding: 20px;
+        }
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: var(--shadow);
+        }
+        .login-card h1 {
+            margin: 0 0 8px;
+            font-size: 24px;
+        }
+        .login-card p {
+            color: var(--muted);
+            margin: 0 0 24px;
+        }
+        .error-message {
+            background: rgba(255, 82, 82, 0.1);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <h1>Admin Login</h1>
+            <p>Sign in to access the CRM dashboard</p>
+            <div class="error-message" id="error-message"></div>
+            <form id="login-form">
+                <div class="form-row">
+                    <label for="username">Username</label>
+                    <input id="username" name="username" type="text" required placeholder="admin" />
+                </div>
+                <div class="form-row">
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="password" required placeholder="••••••••" />
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 8px;">Sign In</button>
+            </form>
+            <p style="margin-top: 16px; font-size: 12px; color: var(--muted);">
+                Default: username=admin, password=admin123
+            </p>
+        </div>
+    </div>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorEl = document.getElementById('error-message');
+
+            try {
+                // Use the correct API endpoint based on current origin
+                const apiUrl = window.location.origin.includes('3000') 
+                    ? '/api/admin/login' 
+                    : 'http://localhost:3000/api/admin/login';
+                
+                const res = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    errorEl.textContent = data.error || 'Login failed';
+                    errorEl.style.display = 'block';
+                    return;
+                }
+
+                localStorage.setItem('adminToken', data.token);
+                localStorage.setItem('adminUsername', data.username);
+                window.location.href = 'dashboard.html';
+            } catch (err) {
+                errorEl.textContent = 'Connection error. Please check if the server is running.';
+                errorEl.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inventory — Pandora Motors</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="icon" href="../assets/favicon.svg" />
+</head>
+<body data-page="inventory">
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="../index.html#home" class="logo">Pandora<span>Motors</span></a>
+            <nav class="nav">
+                <button class="nav-toggle" aria-controls="primary-menu" aria-expanded="false">☰</button>
+                <ul id="primary-menu" class="nav-list">
+                    <li><a href="../index.html#home">Home</a></li>
+                    <li><a href="inventory.html">Inventory</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="testimonials.html">Testimonials</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a class="btn btn-primary btn-small" href="booking.html">Book Test Drive</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="page-hero reveal" data-animate="fade-up">
+            <div class="container">
+                <nav class="breadcrumbs"><a href="../index.html#home">Home</a> <span class="sep">/</span> <span>Inventory</span></nav>
+                <span class="eyebrow">Our Cars</span>
+                <h1>Browse All Inventory</h1>
+                <p>Explore our curated lineup of premium vehicles. Use filters to narrow by brand, model, and price.
+                </p>
+            </div>
+        </section>
+        <section class="section inventory reveal" data-animate="fade-up">
+            <div class="container">
+                <div class="section-head">
+                    <h2>All Inventory</h2>
+                    <p>Browse our full selection. Use filters to narrow your search.</p>
+                </div>
+
+                <div class="filters" aria-label="Car filters">
+                    <div class="filter">
+                        <label for="filter-brand">Brand</label>
+                        <select id="filter-brand"><option value="">All</option></select>
+                    </div>
+                    <div class="filter">
+                        <label for="filter-model">Model</label>
+                        <select id="filter-model"><option value="">All</option></select>
+                    </div>
+                    <div class="filter">
+                        <label for="filter-price">Max Price</label>
+                        <input type="range" id="filter-price" min="20000" max="200000" step="1000" />
+                        <div class="range-output"><span id="filter-price-output"></span></div>
+                    </div>
+                    <div class="filter-actions">
+                        <button id="clear-filters" class="btn btn-ghost">Clear</button>
+                    </div>
+                </div>
+
+                <div id="cars-grid" class="cars-grid" role="list" aria-label="Car listings"></div>
+            </div>
+        </section>
+
+        <section class="section reveal" data-animate="fade-up" style="background: var(--surface);">
+            <div class="container">
+                <div class="section-head">
+                    <h2>Browse by Category</h2>
+                    <p>Explore our curated collections</p>
+                </div>
+                <div class="testimonial-grid">
+                    <div class="card">
+                        <h3>Performance</h3>
+                        <p>High-performance sports cars and track-ready vehicles. BMW M Series, Mercedes AMG, Audi RS models.</p>
+                        <a href="#cars-grid" class="btn btn-outline btn-small" style="margin-top: 12px;">View Performance Cars</a>
+                    </div>
+                    <div class="card">
+                        <h3>Luxury</h3>
+                        <p>Premium sedans and SUVs with exceptional comfort and technology. Lexus, Mercedes-Benz, BMW.</p>
+                        <a href="#cars-grid" class="btn btn-outline btn-small" style="margin-top: 12px;">View Luxury Cars</a>
+                    </div>
+                    <div class="card">
+                        <h3>Electric</h3>
+                        <p>Cutting-edge electric vehicles with impressive range and performance. Tesla and premium EV options.</p>
+                        <a href="#cars-grid" class="btn btn-outline btn-small" style="margin-top: 12px;">View Electric Cars</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section reveal" data-animate="fade-up">
+            <div class="container two-col">
+                <div>
+                    <h2>Why Choose Our Inventory?</h2>
+                    <ul class="checks">
+                        <li><strong>Certified Pre-Owned:</strong> Every vehicle undergoes a comprehensive 150-point inspection</li>
+                        <li><strong>Transparent History:</strong> Full vehicle history reports available for every car</li>
+                        <li><strong>Competitive Pricing:</strong> Fair, upfront pricing with no hidden fees</li>
+                        <li><strong>Warranty Options:</strong> Extended warranty and protection plans available</li>
+                        <li><strong>Financing Made Easy:</strong> Competitive rates and flexible payment options</li>
+                        <li><strong>Nationwide Delivery:</strong> We ship anywhere in the country with full insurance</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Need Help Finding the Right Car?</h3>
+                    <p>Our expert advisors are here to help you find the perfect vehicle. Tell us what you're looking for and we'll match you with options that fit your needs and budget.</p>
+                    <a href="contact.html" class="btn btn-primary" style="margin-top: 16px;">Contact an Advisor</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div class="footer-brand">Pandora<span>Motors</span></div>
+            <div class="footer-copy">© <span id="year"></span> Pandora Motors.</div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/app.js" defer></script>
+</body>
+</html>
+
+

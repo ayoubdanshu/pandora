@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Listings — Pandora Motors CRM</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+    <header class="admin-header">
+        <div class="container header-inner">
+            <a href="dashboard.html" class="logo">Pandora<span>Motors</span> <span style="color: var(--muted); font-size: 14px;">CRM</span></a>
+            <nav class="admin-nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="bookings.html">Bookings</a>
+                <a href="contacts.html">Contacts</a>
+                <a href="listings.html" class="active">Listings</a>
+                <button id="logout-btn" class="btn btn-ghost btn-small">Logout</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="admin-main">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin: 24px 0;">
+                <h1 style="margin: 0;">Car Listings Management</h1>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="syncCars()">Sync from JSON</button>
+                    <button class="btn btn-outline" onclick="showAddCar()">Add New Car</button>
+                </div>
+            </div>
+            
+            <div id="cars-container" class="table-container">
+                <p>Loading...</p>
+            </div>
+        </div>
+    </main>
+
+    <div id="car-modal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <h2 id="modal-title">Add/Edit Car</h2>
+            <form id="car-form">
+                <div class="form-grid">
+                    <div class="form-row">
+                        <label>ID</label>
+                        <input type="text" id="car-id" required />
+                    </div>
+                    <div class="form-row">
+                        <label>Brand</label>
+                        <input type="text" id="car-brand" required />
+                    </div>
+                    <div class="form-row">
+                        <label>Model</label>
+                        <input type="text" id="car-model" required />
+                    </div>
+                    <div class="form-row">
+                        <label>Year</label>
+                        <input type="number" id="car-year" required />
+                    </div>
+                    <div class="form-row">
+                        <label>Price</label>
+                        <input type="number" id="car-price" required />
+                    </div>
+                    <div class="form-row">
+                        <label>Mileage</label>
+                        <input type="number" id="car-mileage" required />
+                    </div>
+                    <div class="form-row">
+                        <label>Fuel</label>
+                        <input type="text" id="car-fuel" required />
+                    </div>
+                    <div class="form-row">
+                        <label>Transmission</label>
+                        <input type="text" id="car-transmission" required />
+                    </div>
+                    <div class="form-row">
+                        <label>Color</label>
+                        <input type="text" id="car-color" required />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label>Images</label>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <input type="file" id="car-image-input" accept="image/*" multiple />
+                        <button type="button" id="upload-images-btn" class="btn btn-outline">Upload Photos</button>
+                    </div>
+                    <div id="uploaded-images" style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;"></div>
+                    <!-- hidden textarea stores comma-separated image URLs for submission -->
+                    <textarea id="car-images" rows="2" required style="display:none"></textarea>
+                </div>
+                <h3 style="margin: 20px 0 12px 0; font-size: 16px;">Specifications</h3>
+                <div class="form-grid">
+                    <div class="form-row">
+                        <label>Engine</label>
+                        <input type="text" id="car-engine" placeholder="e.g., 3.0L Twin-Turbo V6" required />
+                    </div>
+                    <div class="form-row">
+                        <label>Power</label>
+                        <input type="text" id="car-power" placeholder="e.g., 382 hp @ 5,800 rpm" required />
+                    </div>
+                    <div class="form-row">
+                        <label>Drivetrain</label>
+                        <input type="text" id="car-drivetrain" placeholder="e.g., AWD" required />
+                    </div>
+                    <div class="form-row">
+                        <label>MPG</label>
+                        <input type="text" id="car-mpg" placeholder="e.g., 22 city / 29 hwy" required />
+                    </div>
+                </div>
+                <div class="action-buttons" style="margin-top: 16px;">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-ghost" onclick="closeCarModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+    <script>
+        checkAuth();
+        let currentCarId = null;
+
+        loadCars();
+
+        async function loadCars() {
+            try {
+                const res = await apiCall('/api/cars');
+                if (!res) return;
+                const cars = await res.json();
+                
+                const container = document.getElementById('cars-container');
+                if (cars.length === 0) {
+                    container.innerHTML = '<p>No cars in database. Click "Sync from JSON" to import.</p>';
+                    return;
+                }
+
+                container.innerHTML = `
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Brand</th>
+                                <th>Model</th>
+                                <th>Year</th>
+                                <th>Price</th>
+                                <th>Mileage</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${cars.map(c => {
+                                const specs = typeof c.specs === 'string' ? JSON.parse(c.specs) : c.specs;
+                                return `
+                                <tr>
+                                    <td>${c.id}</td>
+                                    <td>${c.brand}</td>
+                                    <td>${c.model}</td>
+                                    <td>${c.year}</td>
+                                    <td>$${parseInt(c.price).toLocaleString()}</td>
+                                    <td>${parseInt(c.mileage).toLocaleString()} mi</td>
+                                    <td><span class="status-badge status-${c.status || 'active'}">${c.status || 'active'}</span></td>
+                                    <td>
+                                        <button class="btn btn-outline btn-small" onclick="editCar('${c.id}')">Edit</button>
+                                        <button class="btn btn-ghost btn-small" onclick="deleteCar('${c.id}')">Delete</button>
+                                    </td>
+                                </tr>
+                            `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                `;
+            } catch (err) {
+                console.error('Failed to load cars', err);
+            }
+        }
+
+        async function syncCars() {
+            if (!confirm('This will sync cars from assets/data/cars.json to the database. Continue?')) return;
+
+            try {
+                const res = await apiCall('/api/cars/sync', { method: 'POST' });
+                if (res && res.ok) {
+                    alert('Cars synced successfully!');
+                    loadCars();
+                }
+            } catch (err) {
+                console.error('Failed to sync cars', err);
+                alert('Failed to sync cars');
+            }
+        }
+
+        function showAddCar() {
+            currentCarId = null;
+            document.getElementById('modal-title').textContent = 'Add New Car';
+            document.getElementById('car-form').reset();
+            document.getElementById('car-modal').classList.add('active');
+        }
+
+        async function editCar(id) {
+            try {
+                const res = await apiCall('/api/cars');
+                if (!res) return;
+                const cars = await res.json();
+                const car = cars.find(c => c.id === id);
+                
+                if (!car) return;
+
+                currentCarId = id;
+                document.getElementById('modal-title').textContent = 'Edit Car';
+                document.getElementById('car-id').value = car.id;
+                document.getElementById('car-id').disabled = true;
+                document.getElementById('car-brand').value = car.brand;
+                document.getElementById('car-model').value = car.model;
+                document.getElementById('car-year').value = car.year;
+                document.getElementById('car-price').value = car.price;
+                document.getElementById('car-mileage').value = car.mileage;
+                document.getElementById('car-fuel').value = car.fuel;
+                document.getElementById('car-transmission').value = car.transmission;
+                document.getElementById('car-color').value = car.color;
+                
+                const images = typeof car.images === 'string' ? JSON.parse(car.images) : car.images;
+                document.getElementById('car-images').value = Array.isArray(images) ? images.join(', ') : images;
+                // Update preview area for existing images
+                if (typeof renderUploadedImages === 'function') renderUploadedImages();
+                
+                const specs = typeof car.specs === 'string' ? JSON.parse(car.specs) : car.specs;
+                document.getElementById('car-engine').value = specs.engine || '';
+                document.getElementById('car-power').value = specs.power || '';
+                document.getElementById('car-drivetrain').value = specs.drivetrain || '';
+                document.getElementById('car-mpg').value = specs.mpg || '';
+                
+                document.getElementById('car-modal').classList.add('active');
+            } catch (err) {
+                console.error('Failed to load car', err);
+            }
+        }
+
+        async function deleteCar(id) {
+            if (!confirm(`Delete car ${id}? This cannot be undone.`)) return;
+
+            try {
+                const res = await apiCall(`/api/cars/${id}`, { method: 'DELETE' });
+                if (res && res.ok) {
+                    loadCars();
+                }
+            } catch (err) {
+                console.error('Failed to delete car', err);
+            }
+        }
+
+        document.getElementById('car-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const images = document.getElementById('car-images').value.split(',').map(s => s.trim()).filter(s => s);
+            const specs = {
+                engine: document.getElementById('car-engine').value,
+                power: document.getElementById('car-power').value,
+                drivetrain: document.getElementById('car-drivetrain').value,
+                mpg: document.getElementById('car-mpg').value
+            };
+
+            const carData = {
+                id: document.getElementById('car-id').value,
+                brand: document.getElementById('car-brand').value,
+                model: document.getElementById('car-model').value,
+                year: parseInt(document.getElementById('car-year').value),
+                price: parseInt(document.getElementById('car-price').value),
+                mileage: parseInt(document.getElementById('car-mileage').value),
+                fuel: document.getElementById('car-fuel').value,
+                transmission: document.getElementById('car-transmission').value,
+                color: document.getElementById('car-color').value,
+                images: images,
+                specs: specs
+            };
+
+            try {
+                const res = await apiCall('/api/cars', {
+                    method: 'POST',
+                    body: JSON.stringify(carData)
+                });
+
+                if (res && res.ok) {
+                    closeCarModal();
+                    loadCars();
+                }
+            } catch (err) {
+                console.error('Failed to save car', err);
+                alert('Failed to save car');
+            }
+        });
+
+        // Image upload handling + preview
+        document.getElementById('upload-images-btn').addEventListener('click', async () => {
+            const input = document.getElementById('car-image-input');
+            if (!input.files || input.files.length === 0) { alert('Select one or more images to upload'); return; }
+
+            const fd = new FormData();
+            for (const f of input.files) fd.append('images', f);
+
+            try {
+                const token = localStorage.getItem('adminToken');
+                const res = await fetch('/api/upload', {
+                    method: 'POST',
+                    headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+                    body: fd
+                });
+
+                if (!res.ok) throw new Error('Upload failed');
+                const data = await res.json();
+                const ta = document.getElementById('car-images');
+                const current = ta.value ? ta.value.split(',').map(s => s.trim()).filter(Boolean) : [];
+                ta.value = [...current, ...data.files].join(', ');
+                input.value = '';
+                renderUploadedImages();
+            } catch (err) {
+                console.error('Upload failed', err);
+                alert('Failed to upload images');
+            }
+        });
+
+        function renderUploadedImages() {
+            const ta = document.getElementById('car-images');
+            const container = document.getElementById('uploaded-images');
+            container.innerHTML = '';
+            const arr = ta.value ? ta.value.split(',').map(s => s.trim()).filter(Boolean) : [];
+            arr.forEach(url => {
+                const wrapper = document.createElement('div');
+                wrapper.style.position = 'relative';
+                wrapper.innerHTML = `\n                    <div style="width:120px; height:80px; background:url('${url}') center/cover; border-radius:8px; border:1px solid var(--border);"></div>\n                    <button type="button" class="btn btn-ghost btn-small" style="position:absolute; top:4px; right:4px;">×</button>\n                `;
+                const btn = wrapper.querySelector('button');
+                btn.addEventListener('click', () => {
+                    const remaining = arr.filter(u => u !== url);
+                    ta.value = remaining.join(', ');
+                    renderUploadedImages();
+                });
+                container.appendChild(wrapper);
+            });
+        }
+
+        function closeCarModal() {
+            document.getElementById('car-modal').classList.remove('active');
+            document.getElementById('car-id').disabled = false;
+            currentCarId = null;
+        }
+
+        document.getElementById('car-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'car-modal') closeCarModal();
+        });
+    </script>
+</body>
+</html>
+

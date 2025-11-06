@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard — Pandora Motors CRM</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+    <header class="admin-header">
+        <div class="container header-inner">
+            <a href="dashboard.html" class="logo">Pandora<span>Motors</span> <span style="color: var(--muted); font-size: 14px;">CRM</span></a>
+            <nav class="admin-nav">
+                <a href="dashboard.html" class="active">Dashboard</a>
+                <a href="bookings.html">Bookings</a>
+                <a href="contacts.html">Contacts</a>
+                <a href="listings.html">Listings</a>
+                <button id="logout-btn" class="btn btn-ghost btn-small">Logout</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="admin-main">
+        <div class="container">
+            <h1 style="margin: 24px 0;">Dashboard</h1>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Pending Bookings</h3>
+                    <div class="stat-value" id="pending-bookings">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>New Contacts</h3>
+                    <div class="stat-value" id="new-contacts">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Bookings</h3>
+                    <div class="stat-value" id="total-bookings">-</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Active Cars</h3>
+                    <div class="stat-value" id="active-cars">-</div>
+                </div>
+            </div>
+
+            <div class="section" style="margin-top: 32px;">
+                <h2>Recent Bookings</h2>
+                <div id="recent-bookings" class="table-container">
+                    <p>Loading...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="admin.js"></script>
+    <script>
+        checkAuth();
+        loadStats();
+        loadRecentBookings();
+
+        async function loadStats() {
+            try {
+                const res = await fetch('/api/dashboard/stats', {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('adminToken')}` }
+                });
+                const stats = await res.json();
+                
+                document.getElementById('pending-bookings').textContent = stats.pendingBookings || 0;
+                document.getElementById('new-contacts').textContent = stats.newContacts || 0;
+                document.getElementById('total-bookings').textContent = stats.totalBookings || 0;
+                document.getElementById('active-cars').textContent = stats.activeCars || 0;
+            } catch (err) {
+                console.error('Failed to load stats', err);
+            }
+        }
+
+        async function loadRecentBookings() {
+            try {
+                const res = await fetch('/api/bookings?limit=5', {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('adminToken')}` }
+                });
+                const bookings = await res.json();
+                
+                const container = document.getElementById('recent-bookings');
+                if (bookings.length === 0) {
+                    container.innerHTML = '<p>No bookings yet.</p>';
+                    return;
+                }
+
+                container.innerHTML = `
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Car</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${bookings.slice(0, 5).map(b => `
+                                <tr>
+                                    <td>${b.name}</td>
+                                    <td>${b.car_name || b.car_id}</td>
+                                    <td>${b.date}</td>
+                                    <td>${b.time}</td>
+                                    <td><span class="status-badge status-${b.status}">${b.status}</span></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            } catch (err) {
+                console.error('Failed to load bookings', err);
+            }
+        }
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contacts — Pandora Motors CRM</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+    <header class="admin-header">
+        <div class="container header-inner">
+            <a href="dashboard.html" class="logo">Pandora<span>Motors</span> <span style="color: var(--muted); font-size: 14px;">CRM</span></a>
+            <nav class="admin-nav">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="bookings.html">Bookings</a>
+                <a href="contacts.html" class="active">Contacts</a>
+                <a href="listings.html">Listings</a>
+                <button id="logout-btn" class="btn btn-ghost btn-small">Logout</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="admin-main">
+        <div class="container">
+            <h1 style="margin: 24px 0;">Contacts Management</h1>
+            
+            <div id="contacts-container" class="table-container">
+                <p>Loading...</p>
+            </div>
+        </div>
+    </main>
+
+    <div id="contact-modal" class="modal">
+        <div class="modal-content">
+            <h2>Contact Details</h2>
+            <div id="contact-details"></div>
+            <div class="form-row">
+                <label>Status</label>
+                <select id="contact-status">
+                    <option value="new">New</option>
+                    <option value="contacted">Contacted</option>
+                    <option value="resolved">Resolved</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <label>Notes</label>
+                <textarea id="contact-notes" rows="3"></textarea>
+            </div>
+            <div class="action-buttons" style="margin-top: 16px;">
+                <button class="btn btn-primary" id="save-contact">Save</button>
+                <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+    <script>
+        checkAuth();
+        let currentContactId = null;
+
+        loadContacts();
+
+        async function loadContacts() {
+            try {
+                const res = await apiCall('/api/contacts');
+                if (!res) return;
+                const contacts = await res.json();
+                
+                const container = document.getElementById('contacts-container');
+                if (contacts.length === 0) {
+                    container.innerHTML = '<p>No contacts yet.</p>';
+                    return;
+                }
+
+                container.innerHTML = `
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Message</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${contacts.map(c => `
+                                <tr>
+                                    <td>#${c.id}</td>
+                                    <td>${c.name}</td>
+                                    <td>${c.email}</td>
+                                    <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${c.message}</td>
+                                    <td><span class="status-badge status-${c.status}">${c.status}</span></td>
+                                    <td>${new Date(c.created_at).toLocaleDateString()}</td>
+                                    <td>
+                                        <button class="btn btn-outline btn-small" onclick="viewContact(${c.id})">View</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            } catch (err) {
+                console.error('Failed to load contacts', err);
+            }
+        }
+
+        async function viewContact(id) {
+            try {
+                const res = await apiCall(`/api/contacts`);
+                if (!res) return;
+                const contacts = await res.json();
+                const contact = contacts.find(c => c.id === id);
+                
+                if (!contact) return;
+
+                currentContactId = id;
+                document.getElementById('contact-details').innerHTML = `
+                    <p><strong>Name:</strong> ${contact.name}</p>
+                    <p><strong>Email:</strong> ${contact.email}</p>
+                    <p><strong>Message:</strong></p>
+                    <p style="background: var(--card); padding: 12px; border-radius: 8px; margin: 8px 0;">${contact.message}</p>
+                    <p><strong>Created:</strong> ${new Date(contact.created_at).toLocaleString()}</p>
+                `;
+                document.getElementById('contact-status').value = contact.status || 'new';
+                document.getElementById('contact-notes').value = contact.notes || '';
+                document.getElementById('contact-modal').classList.add('active');
+            } catch (err) {
+                console.error('Failed to load contact', err);
+            }
+        }
+
+        document.getElementById('save-contact').addEventListener('click', async () => {
+            if (!currentContactId) return;
+
+            const status = document.getElementById('contact-status').value;
+            const notes = document.getElementById('contact-notes').value;
+
+            try {
+                const res = await apiCall(`/api/contacts/${currentContactId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ status, notes })
+                });
+
+                if (res && res.ok) {
+                    closeModal();
+                    loadContacts();
+                }
+            } catch (err) {
+                console.error('Failed to update contact', err);
+            }
+        });
+
+        function closeModal() {
+            document.getElementById('contact-modal').classList.remove('active');
+            currentContactId = null;
+        }
+
+        document.getElementById('contact-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'contact-modal') closeModal();
+        });
+    </script>
+</body>
+</html>
+

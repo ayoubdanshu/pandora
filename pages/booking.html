@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Test Drive — Pandora Motors</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="icon" href="../assets/favicon.svg" />
+</head>
+<body data-page="booking">
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="../index.html#home" class="logo">Pandora<span>Motors</span></a>
+            <nav class="nav">
+                <button class="nav-toggle" aria-controls="primary-menu" aria-expanded="false">☰</button>
+                <ul id="primary-menu" class="nav-list">
+                    <li><a href="../index.html#home">Home</a></li>
+                    <li><a href="inventory.html">Inventory</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a class="btn btn-primary btn-small" href="booking.html">Book Test Drive</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="page-hero reveal" data-animate="fade-up">
+            <div class="container">
+                <nav class="breadcrumbs"><a href="../index.html#home">Home</a> <span class="sep">/</span> <span>Book Test Drive</span></nav>
+                <span class="eyebrow">Experience it</span>
+                <h1>Book Your Test Drive</h1>
+                <p>Select a vehicle and your preferred date/time. We’ll confirm by email and have your car ready.</p>
+            </div>
+        </section>
+        <section class="section booking reveal" data-animate="fade-up">
+            <div class="container">
+                <div class="section-head">
+                    <h2>Book a Test Drive</h2>
+                    <p>Experience the vehicle of your choice. Select your preferred date and time, and we'll confirm your appointment.</p>
+                </div>
+                <form id="booking-form" class="booking-form" novalidate>
+                    <div class="form-grid">
+                        <div class="form-row">
+                            <label for="booking-name">Full Name</label>
+                            <input id="booking-name" name="name" type="text" required placeholder="John Smith" />
+                            <small class="error" data-error-for="booking-name"></small>
+                        </div>
+                        <div class="form-row">
+                            <label for="booking-email">Email</label>
+                            <input id="booking-email" name="email" type="email" required placeholder="john@example.com" />
+                            <small class="error" data-error-for="booking-email"></small>
+                        </div>
+                        <div class="form-row">
+                            <label for="booking-phone">Phone</label>
+                            <input id="booking-phone" name="phone" type="tel" required placeholder="(555) 123-4567" />
+                            <small class="error" data-error-for="booking-phone"></small>
+                        </div>
+                        <div class="form-row">
+                            <label for="booking-car">Select Car</label>
+                            <select id="booking-car" name="carId" required>
+                                <option value="">Choose a car</option>
+                            </select>
+                            <small class="error" data-error-for="booking-car"></small>
+                        </div>
+                        <div class="form-row">
+                            <label for="booking-date">Preferred Date</label>
+                            <input id="booking-date" name="date" type="date" required />
+                            <small class="error" data-error-for="booking-date"></small>
+                        </div>
+                        <div class="form-row">
+                            <label for="booking-time">Preferred Time</label>
+                            <input id="booking-time" name="time" type="time" required />
+                            <small class="error" data-error-for="booking-time"></small>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Confirm Booking</button>
+                    <p class="form-success" id="booking-success" role="status" aria-live="polite"></p>
+                </form>
+            </div>
+        </section>
+
+        <section class="section reveal" data-animate="fade-up" style="background: var(--surface);">
+            <div class="container">
+                <h2>What to Expect</h2>
+                <div class="testimonial-grid">
+                    <div class="card">
+                        <h3>Before Your Visit</h3>
+                        <p>Once you book, we'll send a confirmation email with all the details. We'll have your selected vehicle ready and waiting, with all paperwork prepared in advance.</p>
+                    </div>
+                    <div class="card">
+                        <h3>During Your Test Drive</h3>
+                        <p>Our team will walk you through the vehicle's features and answer any questions. You'll have time to drive and experience the car in real-world conditions.</p>
+                    </div>
+                    <div class="card">
+                        <h3>After Your Visit</h3>
+                        <p>No pressure to buy. Take your time to decide. If you're ready, our team will guide you through financing, warranties, and delivery options.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section reveal" data-animate="fade-up">
+            <div class="container two-col">
+                <div>
+                    <h2>Test Drive Tips</h2>
+                    <ul class="checks">
+                        <li><strong>Bring your license:</strong> A valid driver's license is required for all test drives</li>
+                        <li><strong>Plan ahead:</strong> Book your test drive in advance to ensure your preferred vehicle is available</li>
+                        <li><strong>Ask questions:</strong> Our team is here to help—ask about features, maintenance, or anything else</li>
+                        <li><strong>Take your time:</strong> There's no rush. Drive the vehicle and make sure it feels right for you</li>
+                        <li><strong>Bring a friend:</strong> A second opinion can be helpful when making such an important decision</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Questions About Test Drives?</h3>
+                    <p>Our team is here to help. If you have questions about scheduling, what to bring, or what to expect, don't hesitate to reach out.</p>
+                    <p style="margin-top: 16px;"><strong>Phone:</strong> (555) 012-3456</p>
+                    <p><strong>Email:</strong> sales@pandoramotors.com</p>
+                    <a href="contact.html" class="btn btn-outline" style="margin-top: 16px;">Contact Us</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div class="footer-brand">Pandora<span>Motors</span></div>
+            <div class="footer-copy">© <span id="year"></span> Pandora Motors.</div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/app.js" defer></script>
+</body>
+</html>
+

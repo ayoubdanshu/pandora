@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact — Pandora Motors</title>
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="icon" href="../assets/favicon.svg" />
+</head>
+<body data-page="contact">
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="../index.html#home" class="logo">Pandora<span>Motors</span></a>
+            <nav class="nav">
+                <button class="nav-toggle" aria-controls="primary-menu" aria-expanded="false">☰</button>
+                <ul id="primary-menu" class="nav-list">
+                    <li><a href="../index.html#home">Home</a></li>
+                    <li><a href="inventory.html">Inventory</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="testimonials.html">Testimonials</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a class="btn btn-primary btn-small" href="booking.html">Book Test Drive</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <section class="page-hero reveal" data-animate="fade-up">
+            <div class="container">
+                <nav class="breadcrumbs"><a href="../index.html#home">Home</a> <span class="sep">/</span> <span>Contact</span></nav>
+                <span class="eyebrow">We’re here to help</span>
+                <h1>Contact Pandora Motors</h1>
+                <p>Reach out with questions about vehicles, financing, or availability. We respond quickly.</p>
+            </div>
+        </section>
+        <section class="section contact reveal" data-animate="fade-up">
+            <div class="container two-col">
+                <div>
+                    <h2>Contact Us</h2>
+                    <p>Send us a message and our advisors will reach out promptly.</p>
+                    <form id="contact-form" novalidate>
+                        <div class="form-row">
+                            <label for="contact-name">Full Name</label>
+                            <input id="contact-name" name="name" type="text" required placeholder="Jane Doe" />
+                            <small class="error" data-error-for="contact-name"></small>
+                        </div>
+                        <div class="form-row">
+                            <label for="contact-email">Email</label>
+                            <input id="contact-email" name="email" type="email" required placeholder="jane@example.com" />
+                            <small class="error" data-error-for="contact-email"></small>
+                        </div>
+                        <div class="form-row">
+                            <label for="contact-message">Message</label>
+                            <textarea id="contact-message" name="message" rows="4" required placeholder="How can we help?"></textarea>
+                            <small class="error" data-error-for="contact-message"></small>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                        <p class="form-success" id="contact-success" role="status" aria-live="polite"></p>
+                    </form>
+                </div>
+                <div class="contact-aside">
+                    <div class="card">
+                        <h3>Visit Our Showroom</h3>
+                        <p><strong>Address:</strong><br/>123 Orion Ave, Suite 5<br/>Pandora City, PC 10010</p>
+                        <p><strong>Hours:</strong><br/>Monday–Saturday: 9am–7pm<br/>Sunday: 11am–5pm</p>
+                        <p><strong>Phone:</strong> (555) 012-3456<br/><strong>Email:</strong> info@pandoramotors.com</p>
+                    </div>
+                    <div class="card" style="margin-top: 16px;">
+                        <h3>Sales Department</h3>
+                        <p>Interested in a specific vehicle? Our sales team can provide detailed information, schedule test drives, and answer any questions.</p>
+                        <p><strong>Email:</strong> sales@pandoramotors.com</p>
+                    </div>
+                    <div class="card" style="margin-top: 16px;">
+                        <h3>Finance & Service</h3>
+                        <p>Questions about financing options, warranties, or service? Our finance and service teams are here to help.</p>
+                        <p><strong>Finance:</strong> finance@pandoramotors.com<br/><strong>Service:</strong> service@pandoramotors.com</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section reveal" data-animate="fade-up" style="background: var(--surface);">
+            <div class="container">
+                <h2>Frequently Asked Questions</h2>
+                <div class="testimonial-grid">
+                    <div class="card">
+                        <h3>Do you offer financing?</h3>
+                        <p>Yes. We partner with multiple lenders to provide competitive rates and flexible payment options. Our finance team can help you find the best solution for your budget, whether you're looking for traditional financing or lease options.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Can I get a vehicle inspection report?</h3>
+                        <p>Absolutely. Every vehicle in our inventory undergoes a comprehensive 150-point inspection. You'll receive a detailed report covering mechanical condition, cosmetic status, and any recommended maintenance. We're transparent about every vehicle's history.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Do you deliver nationwide?</h3>
+                        <p>Yes. We coordinate fully insured shipping anywhere in the country. Our delivery partners are experienced in transporting premium vehicles safely and securely. Delivery costs vary by distance and can be discussed during the purchase process.</p>
+                    </div>
+                    <div class="card">
+                        <h3>What warranty options are available?</h3>
+                        <p>We offer several warranty options, including extended coverage plans that can protect your investment for years to come. Our team will explain all available options and help you choose the coverage that best fits your needs.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Can I trade in my current vehicle?</h3>
+                        <p>Yes. We accept trade-ins and can provide a fair market value assessment. Our team will evaluate your vehicle and apply its value toward your new purchase, making the process seamless.</p>
+                    </div>
+                    <div class="card">
+                        <h3>How do I schedule a test drive?</h3>
+                        <p>You can schedule a test drive online through our booking page, or contact us directly by phone or email. We'll have your preferred vehicle ready and can accommodate same-day appointments when available.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section reveal" data-animate="fade-up">
+            <div class="container two-col">
+                <div>
+                    <h2>Find Us</h2>
+                    <div class="card" style="padding: 0; overflow: hidden;">
+                        <div style="position: relative; width: 100%; height: 0; padding-bottom: 56.25%; border-radius: 12px; overflow: hidden; background: var(--card);">
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3461.2892177868616!2d-5.726619323831237!3d29.827072528835853!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdbe629f966421d9%3A0x667d08af18d94cb4!2sDar%20Mhamid!5e0!3m2!1sen!2sma!4v1762449717990!5m2!1sen!2sma" 
+                                width="100%" 
+                                height="100%" 
+                                style="border:0; position: absolute; top: 0; left: 0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade"
+                                title="Pandora Motors Location - Dar Mhamid">
+                            </iframe>
+                        </div>
+                        <div style="padding: 16px;">
+                            <p style="margin: 0; font-size: 14px; color: var(--muted);">
+                                <strong style="color: var(--text);">📍 Address:</strong><br/>
+                                123 Orion Ave, Suite 5<br/>
+                                Pandora City, PC 10010
+                            </p>
+                            <a 
+                                href="https://www.google.com/maps/search/?api=1&query=123+Orion+Ave+Suite+5+Pandora+City+PC+10010" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                class="btn btn-outline btn-small"
+                                style="margin-top: 12px; display: inline-block;">
+                                Open in Google Maps
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h2>Get in Touch</h2>
+                    <div class="card">
+                        <p>Prefer to speak with someone directly? Our team is available during business hours to answer your questions, schedule appointments, or provide vehicle information.</p>
+                        <p style="margin-top: 16px;"><strong>Phone:</strong> (555) 012-3456</p>
+                        <p><strong>Email:</strong> info@pandoramotors.com</p>
+                        <p style="margin-top: 16px;">We typically respond to emails within 2 hours during business hours.</p>
+                        <a href="booking.html" class="btn btn-primary" style="margin-top: 20px;">Book a Test Drive</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div class="footer-brand">Pandora<span>Motors</span></div>
+            <div class="footer-copy">© <span id="year"></span> Pandora Motors.</div>
+        </div>
+    </footer>
+
+    <script src="../assets/js/app.js" defer></script>
+</body>
+</html>
+
+
