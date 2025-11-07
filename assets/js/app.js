@@ -129,7 +129,14 @@ function renderGrid() {
         card.className = 'car-card';
         card.setAttribute('role', 'listitem');
         // Use an <img> with loading="lazy" for better performance and to avoid forced background repaints
-        const thumb = car.images && car.images[0] ? car.images[0] : '';
+        // Provide a local fallback in case the car has no images or remote images fail.
+        let thumb = '';
+        if (car.images && car.images[0]) {
+            thumb = car.images[0];
+        } else {
+            // local fallback image (kept in repo)
+            thumb = 'assets/images/products/images-1762463495584-624652520.jpg';
+        }
         card.innerHTML = `
             <div class="car-media">
                 <img src="${thumb}" alt="${car.brand} ${car.model}" loading="lazy" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"/>
