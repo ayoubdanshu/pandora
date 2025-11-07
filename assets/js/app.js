@@ -124,12 +124,16 @@ function renderGrid() {
         return;
     }
 
-    filtered.forEach(car => {
+        filtered.forEach(car => {
         const card = document.createElement('article');
         card.className = 'car-card';
         card.setAttribute('role', 'listitem');
+        // Use an <img> with loading="lazy" for better performance and to avoid forced background repaints
+        const thumb = car.images && car.images[0] ? car.images[0] : '';
         card.innerHTML = `
-            <div class="car-media" style="background-image:url('${car.images[0]}')"></div>
+            <div class="car-media">
+                <img src="${thumb}" alt="${car.brand} ${car.model}" loading="lazy" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"/>
+            </div>
             <div class="car-body">
                 <div class="car-title">${car.brand} ${car.model}</div>
                 <div class="car-specs">
